@@ -10,6 +10,7 @@ from msa_pair.data import (
 
 def compute_scores(input_dir, dst_path):
     from msa_pair.data import esm_scoring
+
     species_dict, msas_dict, _, _ = species_processing.pair_species(input_dir)
 
     esm_scorer = esm_scoring.EsmScoring()
@@ -19,7 +20,6 @@ def compute_scores(input_dir, dst_path):
 
 
 def pair_rows(input_dir, src_score_path, dst_pr_path, overwrite=False):
-
     if overwrite or not os.path.exists(dst_pr_path):
         species_dict, msas_dict, _, _ = species_processing.pair_species(
             input_dir
@@ -61,8 +61,11 @@ if __name__ == '__main__':
     input_root = sys.argv[1]
     for name in tqdm(os.listdir(input_root)):
         input_dir = os.path.join(input_root, name)
-        pr_path = os.path.join(input_dir, 'esm_pr.json')
         score_path = os.path.join(input_dir, 'esm_scores.json')
-        dst_path = os.path.join(input_dir, 'multimer.npz')
+        compute_scores(input_dir, score_path)
+
+        pr_path = os.path.join(input_dir, 'esm_pr.json')
         pair_rows(input_dir, score_path, pr_path)
+
+        dst_path = os.path.join(input_dir, 'multimer.npz')
         process(input_dir, pr_path, dst_path)

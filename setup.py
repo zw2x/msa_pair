@@ -8,5 +8,6 @@ setup(
         'pandas',
         'scipy',
         'requests',
+        'biopython',
     ],
 )
