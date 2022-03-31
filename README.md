@@ -2,6 +2,7 @@
 
 ## Installation
 ```
+git clone https://github.com/zw2x/msa_pair.git
 cd msa_pair
 pip install -e .
 ```
@@ -27,22 +28,33 @@ structure of each of the subdirectory looks like this:
 
 ### AlphaFold-Multimer default pipeline
 ```
-python msa_pair/scripts/build_alphafold_features.py below_medium
+python scripts/build_alphafold_features.py below_medium
 ```
 
 ### MSA-Transformer ColAttn pipeline
 After modifing `esm/model.py` using the `model.py` file provided by Bo Chen, run
 
 ```
-python msa_pair/scripts/build_colattn_features.py below_medium
+python scripts/build_colattn_features.py below_medium
 ```
 You can also replace the `compute_scores` function in the script with your own 
 scoring function, and then use the `pair_rows` and `process` in the script to 
 generate features for AlphaFold-Multimer
 
 ### Genetic locus pipeline
+This pipeline needs fast internet connections and a lot of memory and disk 
+space, because we need to download and process whole genome sequence (WGS) data 
+from [ENA](https://www.ebi.ac.uk/ena/browser/).
 
-To be updated.
+Download required WGS data from ENA
+```
+python scripts/export_ena_requests below_medium
+```
+
+Pair sequences
+```
+python scripts/build_ena_features.py below_medium
+```
 
 ## Run AlphaFold-Multimer
 ```

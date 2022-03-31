@@ -31,7 +31,6 @@ def process_batch(root_dir):
     for name in tqdm(all_names):
         input_dir = os.path.join(root_dir, name)
         process(input_dir)
-        break
 
 def get_dir_size(input_dir):
     total = 0

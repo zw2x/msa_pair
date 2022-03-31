@@ -17,8 +17,6 @@ from alphafold.common import residue_constants
 
 from msa_pair.data import species_processing
 
-MSA_CROP_SIZE = 3072
-
 logger = logging.getLogger(__file__)
 
 def _make_all_seq_msa_features(msa_feats):
@@ -56,8 +54,7 @@ def build_paired_rows(auth_chain_ids, paired_rows_dict):
     for i in range(num_rows):
         paired_rows.append([rows[i] for rows in all_rows])
     paired_rows = np.array(paired_rows)
-    assert paired_rows.shape == (num_rows, len(auth_chain_ids))
-    print(paired_rows.shape)
+    assert paired_rows.shape == (num_rows, len(auth_chain_ids)), paired_rows.shape
     return paired_rows
 
 class PairingPipeline:
@@ -113,14 +110,14 @@ class PairingPipeline:
         chains = msa_pairing.deduplicate_unpaired_sequences(chains)
         chains = feature_processing.crop_chains(
             chains,
-            msa_crop_size=MSA_CROP_SIZE,
+            msa_crop_size=feature_processing.MSA_CROP_SIZE,
             pair_msa_sequences=True,
-            max_templates=4,
+            max_templates=feature_processing.MAX_TEMPLATES,
         )
         np_example = msa_pairing.merge_chain_features(
             np_chains_list=chains,
             pair_msa_sequences=True,
-            max_templates=4
+            max_templates=feature_processing.MAX_TEMPLATES,
         )
         np_example = feature_processing.process_final(np_example)
         logger.info(tree.map_structure(lambda x: x.shape, np_example))

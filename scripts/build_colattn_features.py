@@ -62,10 +62,12 @@ if __name__ == '__main__':
     for name in tqdm(os.listdir(input_root)):
         input_dir = os.path.join(input_root, name)
         score_path = os.path.join(input_dir, 'esm_scores.json')
-        compute_scores(input_dir, score_path)
+        if not os.path.exists(score_path):
+            compute_scores(input_dir, score_path)
 
         pr_path = os.path.join(input_dir, 'esm_pr.json')
-        pair_rows(input_dir, score_path, pr_path)
+        if not os.path.exists(pr_path):
+            pair_rows(input_dir, score_path, pr_path)
 
-        dst_path = os.path.join(input_dir, 'multimer.npz')
+        dst_path = os.path.join(input_dir, 'multimer_esm.npz')
         process(input_dir, pr_path, dst_path)
